@@ -9,7 +9,7 @@ const TextareaCard = ({ maxLength = 250, value = "", onChange = () => {}, classN
 
   return (
     <Card className={className}>
-      <CardContent className="space-y-3 pt-6">
+      <CardContent className="space-y-3">
         <label htmlFor="reason-textarea" className="block text-sm font-medium text-foreground">
           The reason we exist
         </label>
