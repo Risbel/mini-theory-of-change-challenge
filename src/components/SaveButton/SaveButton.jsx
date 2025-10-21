@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
 import { SaveIcon, LoaderCircleIcon, AlertCircleIcon } from "lucide-react";
 import { validateTheoryOfChangeData, savedDataSchema } from "@/schemas/theoryOfChangeSchema";
+import { toast } from "sonner";
 
 const SaveButton = () => {
   const { state } = useTheoryOfChangeContext();
@@ -16,14 +17,16 @@ const SaveButton = () => {
   const handleSave = async () => {
     // Don't save if validation fails
     if (!validation.isValid) {
-      console.error("❌ Cannot save: Validation failed", validation.errors || []);
+      toast.error("Cannot save: Validation failed", validation.errors || []);
       return;
     }
 
     setIsSaving(true);
 
+    const loadingToast = toast.loading("Saving data...");
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const dataToSave = {
         reasonValue: state.reasonValue,
@@ -40,13 +43,9 @@ const SaveButton = () => {
 
       localStorage.setItem("theoryOfChangeData", JSON.stringify(validatedData));
 
-      // Log success message
-      console.log("✅ Data saved successfully to localStorage!", {
-        timestamp: validatedData.timestamp,
-        data: validatedData,
-      });
+      toast.success("Data saved successfully to localStorage!", { id: loadingToast });
     } catch (error) {
-      console.error("❌ Error saving data:", error);
+      toast.error("Error saving data:", error, { id: loadingToast });
     } finally {
       setIsSaving(false);
     }

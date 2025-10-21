@@ -29,12 +29,22 @@ const initialState = {
       subOutcomes: [
         { id: "direct-sub-1", title: "Students learn to use productivity tools effectively" },
         { id: "direct-sub-2", title: "Students improve technical collaboration skills" },
+        { id: "direct-sub-3", title: "Students master data analysis and visualization techniques" },
+        { id: "direct-sub-4", title: "Students develop coding and programming competencies" },
       ],
     },
     {
       id: "direct-2",
       title: "Students incorporate resilience and wellbeing practices",
       subOutcomes: [],
+    },
+    {
+      id: "direct-3",
+      title: "Students develop a sense of community and belonging",
+      subOutcomes: [
+        { id: "direct-sub-14", title: "Students form meaningful peer relationships and networks" },
+        { id: "direct-sub-15", title: "Students participate in collaborative group projects" },
+      ],
     },
   ],
   indirectOutcomes: [
