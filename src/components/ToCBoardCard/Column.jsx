@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon, XIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 
-const Column = ({ items = [], onItemsChange = () => {}, className = "", children }) => {
+const Column = ({ items = [], onItemsChange = () => {}, className = "", allowSubOutcomes = false, children }) => {
   const [draggedItem, setDraggedItem] = useState(null);
   const [dropPosition, setDropPosition] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
   const [editingValue, setEditingValue] = useState("");
+  const [editingSubOutcome, setEditingSubOutcome] = useState(null);
+  const [editingSubValue, setEditingSubValue] = useState("");
   const columnRef = useRef(null);
 
   const handleDragStart = (e, index) => {
@@ -114,12 +116,76 @@ const Column = ({ items = [], onItemsChange = () => {}, className = "", children
     onItemsChange(updatedItems);
   };
 
+  const handleEditSubOutcome = (subOutcome, subIndex, parentIndex) => {
+    setEditingSubOutcome({ subIndex, parentIndex });
+    setEditingSubValue(subOutcome.title);
+  };
+
+  const handleSaveSubEdit = () => {
+    if (editingSubValue.trim() && editingSubOutcome) {
+      const { subIndex, parentIndex } = editingSubOutcome;
+      const updatedItems = items.map((item, index) => {
+        if (index === parentIndex) {
+          const updatedSubOutcomes = item.subOutcomes.map((sub, i) =>
+            i === subIndex ? { ...sub, title: editingSubValue.trim() } : sub
+          );
+          return { ...item, subOutcomes: updatedSubOutcomes };
+        }
+        return item;
+      });
+      onItemsChange(updatedItems);
+      setEditingSubOutcome(null);
+      setEditingSubValue("");
+    }
+  };
+
+  const handleCancelSubEdit = () => {
+    setEditingSubOutcome(null);
+    setEditingSubValue("");
+  };
+
+  const handleDeleteSubOutcome = (subOutcome, subIndex, parentIndex) => {
+    const updatedItems = items.map((item, index) => {
+      if (index === parentIndex) {
+        const updatedSubOutcomes = item.subOutcomes.filter((_, i) => i !== subIndex);
+        return { ...item, subOutcomes: updatedSubOutcomes };
+      }
+      return item;
+    });
+    onItemsChange(updatedItems);
+  };
+
+  const handleAddSubOutcome = (title, parentIndex) => {
+    const newSubOutcome = {
+      id: `sub-${Date.now()}`,
+      title,
+    };
+
+    const updatedItems = items.map((item, index) => {
+      if (index === parentIndex) {
+        const updatedSubOutcomes = [...(item.subOutcomes || []), newSubOutcome];
+        return { ...item, subOutcomes: updatedSubOutcomes };
+      }
+      return item;
+    });
+    onItemsChange(updatedItems);
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleSaveEdit();
     } else if (e.key === "Escape") {
       handleCancelEdit();
+    }
+  };
+
+  const handleSubKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSaveSubEdit();
+    } else if (e.key === "Escape") {
+      handleCancelSubEdit();
     }
   };
 
@@ -137,12 +203,13 @@ const Column = ({ items = [], onItemsChange = () => {}, className = "", children
           {dropPosition === index && draggedItem !== index && <DropIndicator />}
 
           {editingItem === index ? (
-            <div className="p-2 border rounded-lg shadow-sm bg-background">
+            <div className="p-2 border rounded-lg shadow-sm bg-background" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-start gap-1">
                 <Textarea
                   value={editingValue}
                   onChange={(e) => setEditingValue(e.target.value)}
                   onKeyDown={handleKeyDown}
+                  onClick={(e) => e.stopPropagation()}
                   autoFocus
                   style={{ lineHeight: "1.2", fontSize: "12px" }}
                 />
@@ -152,7 +219,10 @@ const Column = ({ items = [], onItemsChange = () => {}, className = "", children
                   className="size-5"
                   variant="outline"
                   title="Cancel editing"
-                  onClick={handleCancelEdit}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCancelEdit();
+                  }}
                 >
                   <XIcon className="size-3" />
                 </Button>
@@ -166,6 +236,16 @@ const Column = ({ items = [], onItemsChange = () => {}, className = "", children
               onDragStart={handleDragStart}
               onEdit={handleEditItem}
               onDelete={handleDeleteItem}
+              onEditSubOutcome={handleEditSubOutcome}
+              onDeleteSubOutcome={handleDeleteSubOutcome}
+              onAddSubOutcome={handleAddSubOutcome}
+              editingSubOutcome={editingSubOutcome}
+              editingSubValue={editingSubValue}
+              setEditingSubValue={setEditingSubValue}
+              handleSaveSubEdit={handleSaveSubEdit}
+              handleCancelSubEdit={handleCancelSubEdit}
+              handleSubKeyDown={handleSubKeyDown}
+              allowSubOutcomes={allowSubOutcomes}
               children={children}
             />
           )}

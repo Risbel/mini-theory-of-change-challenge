@@ -32,6 +32,7 @@ const ToCBoardCard = () => {
         <Column
           items={directOutcomes}
           onItemsChange={(items) => dispatch({ type: ACTIONS.SET_DIRECT_OUTCOMES, payload: items })}
+          allowSubOutcomes={true}
         />
       </ColumnCardWrapper>
 
@@ -45,6 +46,7 @@ const ToCBoardCard = () => {
         <Column
           items={indirectOutcomes}
           onItemsChange={(items) => dispatch({ type: ACTIONS.SET_INDIRECT_OUTCOMES, payload: items })}
+          allowSubOutcomes={false}
         />
       </ColumnCardWrapper>
 
@@ -58,6 +60,7 @@ const ToCBoardCard = () => {
         <Column
           items={ultimateImpact}
           onItemsChange={(items) => dispatch({ type: ACTIONS.SET_ULTIMATE_IMPACT, payload: items })}
+          allowSubOutcomes={false}
         />
       </ColumnCardWrapper>
     </div>
