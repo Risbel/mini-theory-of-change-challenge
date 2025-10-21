@@ -4,9 +4,10 @@ import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
 import { SaveIcon, LoaderCircleIcon, AlertCircleIcon } from "lucide-react";
 import { validateTheoryOfChangeData, savedDataSchema } from "@/schemas/theoryOfChangeSchema";
 import { toast } from "sonner";
+import { ACTIONS } from "@/constants/actionTypes";
 
 const SaveButton = () => {
-  const { state } = useTheoryOfChangeContext();
+  const { state, dispatch } = useTheoryOfChangeContext();
   const [isSaving, setIsSaving] = useState(false);
 
   // Validate the current state
@@ -43,7 +44,10 @@ const SaveButton = () => {
 
       localStorage.setItem("theoryOfChangeData", JSON.stringify(validatedData));
 
-      toast.success("Data saved successfully to localStorage!", { id: loadingToast });
+      // Reset all state after successful save
+      dispatch({ type: ACTIONS.RESET_ALL });
+
+      toast.success("Data saved successfully and form reset!", { id: loadingToast });
     } catch (error) {
       toast.error("Error saving data:", error, { id: loadingToast });
     } finally {

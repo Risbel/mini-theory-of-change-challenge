@@ -2,6 +2,15 @@ import { useReducer } from "react";
 import { TheoryOfChangeContext } from "./theoryOfChangeContext";
 import { ACTIONS } from "@/constants/actionTypes";
 
+const emptyState = {
+  reasonValue: "",
+  peopleTags: [],
+  assumptions: [],
+  directOutcomes: [],
+  indirectOutcomes: [],
+  ultimateImpact: [],
+};
+
 const initialState = {
   reasonValue: "",
   peopleTags: ["Students"],
@@ -71,6 +80,8 @@ const reducer = (state, action) => {
       return { ...state, indirectOutcomes: action.payload };
     case ACTIONS.SET_ULTIMATE_IMPACT:
       return { ...state, ultimateImpact: action.payload };
+    case ACTIONS.RESET_ALL:
+      return emptyState;
     default:
       return state;
   }
