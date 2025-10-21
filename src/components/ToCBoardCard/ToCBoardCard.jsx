@@ -3,23 +3,23 @@ import ColumnCardWrapper from "./ColumnCardWrapper";
 import Column from "./Column";
 import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
 import { ACTIONS } from "@/constants/actionTypes";
+import { cn } from "@/lib/utils";
 
-const ToCBoardCard = () => {
+const ToCBoardCard = ({ className = "" }) => {
   const { state, dispatch } = useTheoryOfChangeContext();
   const { directOutcomes, indirectOutcomes, ultimateImpact } = state;
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", className)}>
       <ColumnCardWrapper
         className="h-[400px]"
         title="Programmes"
         description="Sets of activities we deliver"
         pillText="Zone of control"
+        icon="users"
       >
-        <p className="text-xs">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit
-          amet consectetur adipisicing elit. Quisquam, quos.
+        <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+          Programmes displayed here are synced with your main Programmes list. To add or make changes, please visit the{" "}
+          <span className="text-primary font-semibold cursor-pointer hover:underline">Programmes</span> section.
         </p>
       </ColumnCardWrapper>
 
@@ -28,6 +28,7 @@ const ToCBoardCard = () => {
         title="Direct outcomes"
         description="Changes we influence directly"
         pillText="Zone of direct influence"
+        icon="clipboardListIcon"
       >
         <Column
           items={directOutcomes}
@@ -42,6 +43,7 @@ const ToCBoardCard = () => {
         description="What we contribute over time"
         pillText="Zone of indirect influence"
         isDotted={true}
+        icon="fileCheck2"
       >
         <Column
           items={indirectOutcomes}
@@ -56,6 +58,7 @@ const ToCBoardCard = () => {
         description="The lasting change we seek"
         pillText="Zone of contribution"
         isDotted={true}
+        icon="target"
       >
         <Column
           items={ultimateImpact}

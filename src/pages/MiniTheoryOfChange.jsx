@@ -7,7 +7,7 @@ import TheoryOfChangeProvider from "@/contexts/TheoryOfChangeProvider";
 const MiniTheoryOfChange = () => {
   return (
     <TheoryOfChangeProvider>
-      <div className="max-w-5xl mx-auto p-4 md:p-6 space-y-8">
+      <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-4 md:space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-primary">Theory of change</h1>
           <p className="text-muted-foreground">
@@ -15,8 +15,11 @@ const MiniTheoryOfChange = () => {
           </p>
         </div>
 
-        <TextareaCard />
-        <TagInputCard />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <TextareaCard />
+          <TagInputCard />
+        </div>
+
         <TableCard />
         <ToCBoardCard />
       </div>
