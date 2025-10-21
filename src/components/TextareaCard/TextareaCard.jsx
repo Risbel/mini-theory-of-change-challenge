@@ -21,7 +21,7 @@ const TextareaCard = ({ maxLength = 250, value = "", onChange = () => {}, classN
             onChange={(e) => onChange(e.target.value)}
             placeholder="e.g. Strengthening local neighbourhoods through the power of food"
             maxLength={maxLength}
-            resize
+            resize="true"
             className={cn(isAtLimit && "border-destructive")}
           />
 
