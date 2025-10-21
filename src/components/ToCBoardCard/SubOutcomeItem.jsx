@@ -24,7 +24,7 @@ const SubOutcomeItem = ({
   return (
     <div>
       {isEditing ? (
-        <div className="p-2 bg-background border rounded" onClick={(e) => e.stopPropagation()}>
+        <div className="p-2 bg-background border" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-start gap-1">
             <Textarea
               value={editingValue}
@@ -55,7 +55,7 @@ const SubOutcomeItem = ({
           </div>
         </div>
       ) : (
-        <div className="p-2 bg-background border rounded text-xs hover:bg-muted/50 transition-colors">
+        <div className="p-2 bg-background border rounded-lg text-xs hover:border-primary/50 transition-colors">
           <div className="flex items-start gap-2">
             <div className="flex-1 min-w-0">
               <span className="text-xs break-words leading-relaxed">{subOutcome.title}</span>

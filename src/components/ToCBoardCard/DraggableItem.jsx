@@ -41,7 +41,7 @@ const DraggableItem = ({
       onDragStart={(e) => onDragStart(e, index)}
       onClick={() => allowSubOutcomes && setIsExpanded(!isExpanded)}
       className={cn(
-        "group border rounded-lg shadow-sm transition-all duration-200 cursor-move",
+        "group border rounded-lg overflow-hidden shadow-sm transition-all duration-200 cursor-move",
         "hover:shadow-md hover:border-primary/50 cursor-pointer group",
         isDragging && "opacity-40"
       )}
@@ -110,7 +110,7 @@ const DraggableItem = ({
       {/* SubOutcomes */}
       {allowSubOutcomes && isExpanded && (
         <div className="border-t bg-muted/20">
-          <div className="p-2 space-y-1">
+          <div className="p-2 space-y-1 hover:bg-muted/50 transition-colors">
             {/* Existing SubOutcomes */}
             {hasSubOutcomes &&
               item.subOutcomes.map((subOutcome, subIndex) => {
@@ -150,12 +150,12 @@ const DraggableItem = ({
                   setShowAddSubInput(true);
                 }}
                 className={cn(
-                  "w-full text-left p-2 rounded text-xs text-muted-foreground",
-                  "hover:bg-muted/50 transition-colors flex items-center gap-2"
+                  "w-full text-left p-2 rounded-lg cursor-pointer text-xs text-muted-foreground",
+                  "hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2"
                 )}
               >
                 <PlusIcon className="size-3" />
-                Add sub-outcome
+                Create
               </button>
             )}
           </div>

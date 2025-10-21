@@ -69,8 +69,8 @@ const AddItemInput = ({ onAddItem }) => {
         <button
           onClick={() => setShowInput(true)}
           className={cn(
-            "w-full text-left p-2 rounded-lg text-xs text-muted-foreground",
-            "hover:bg-muted/50 transition-colors flex items-center gap-2"
+            "w-full text-left p-2 rounded-lg cursor-pointer text-xs text-muted-foreground mb-24",
+            "hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2"
           )}
         >
           <PlusIcon className="size-3" />

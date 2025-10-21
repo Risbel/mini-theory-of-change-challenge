@@ -1,7 +1,42 @@
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { ChevronDownIcon } from "lucide-react";
 
 const ColumnCardWrapper = ({ title, description, pillText, isDotted = false, className = "", children, ...props }) => {
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const contentRef = useRef(null);
+
+  const handleScroll = () => {
+    if (contentRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10; // 10px tolerance
+      setShowScrollButton(!isAtBottom && scrollHeight > clientHeight);
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (contentRef.current) {
+      contentRef.current.scrollTo({
+        top: contentRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const content = contentRef.current;
+    if (content) {
+      content.addEventListener("scroll", handleScroll);
+      // Check initial state
+      handleScroll();
+
+      return () => {
+        content.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
+
   return (
     <Card
       className={cn(
@@ -15,7 +50,26 @@ const ColumnCardWrapper = ({ title, description, pillText, isDotted = false, cla
         <CardTitle className="text-lg font-bold text-primary">{title}</CardTitle>
         <CardDescription className="text-xs font-semibold text-muted-foreground">{description}</CardDescription>
       </CardHeader>
-      <CardContent className="px-4 flex flex-col h-full py-0 flex-1 overflow-y-auto">{children}</CardContent>
+      <CardContent
+        ref={contentRef}
+        className="px-4 flex flex-col h-full py-0 flex-1 scrollbar-hidden"
+        onScroll={handleScroll}
+      >
+        {children}
+      </CardContent>
+
+      {/* Show More Button */}
+      {showScrollButton && (
+        <div className="flex justify-center pb-0">
+          <button
+            onClick={scrollToBottom}
+            className="text-xs font-semibold cursor-pointer text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+          >
+            Show more
+            <ChevronDownIcon className="size-3" />
+          </button>
+        </div>
+      )}
 
       <CardFooter className="w-full px-0 h-16 flex items-center justify-center">
         {pillText && (
