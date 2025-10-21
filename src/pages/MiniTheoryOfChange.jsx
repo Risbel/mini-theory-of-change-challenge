@@ -2,6 +2,7 @@ import { TextareaCard } from "@/components/TextareaCard";
 import { TagInputCard } from "@/components/TagInputCard";
 import { TableCard } from "@/components/TableCard";
 import ToCBoardCard from "@/components/ToCBoardCard";
+import SaveButton from "@/components/SaveButton";
 import TheoryOfChangeProvider from "@/contexts/TheoryOfChangeProvider";
 
 const MiniTheoryOfChange = () => {
@@ -22,6 +23,11 @@ const MiniTheoryOfChange = () => {
 
         <TableCard />
         <ToCBoardCard />
+
+        {/* Save Button */}
+        <div className="flex justify-end pt-4">
+          <SaveButton />
+        </div>
       </div>
     </TheoryOfChangeProvider>
   );
