@@ -6,6 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon, CircleIcon, Edit2Icon, PlusIcon, Trash2Icon, XIcon } from "lucide-react";
+import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
+import { ACTIONS } from "@/constants/actionTypes";
 
 const CERTAINTY_OPTIONS = [
   {
@@ -28,12 +30,9 @@ const CERTAINTY_OPTIONS = [
   },
 ];
 
-export default function TableCard({
-  title = "What we believe to be true",
-  assumptions = [],
-  onChange = () => {},
-  className = "",
-}) {
+export default function TableCard({ title = "What we believe to be true", className = "" }) {
+  const { state, dispatch } = useTheoryOfChangeContext();
+  const { assumptions } = state;
   const [editingId, setEditingId] = useState(null);
   const [editingValue, setEditingValue] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -61,7 +60,7 @@ export default function TableCard({
         description: newDescription.trim(),
         certainty: newCertainty,
       };
-      onChange([...assumptions, newAssumption]);
+      dispatch({ type: ACTIONS.SET_ASSUMPTIONS, payload: [...assumptions, newAssumption] });
       setNewDescription("");
       setNewCertainty("");
       newInputRef.current?.focus();
@@ -79,7 +78,7 @@ export default function TableCard({
       const updatedAssumptions = assumptions.map((assumption) =>
         assumption.id === editingId ? { ...assumption, description: editingValue.trim() } : assumption
       );
-      onChange(updatedAssumptions);
+      dispatch({ type: ACTIONS.SET_ASSUMPTIONS, payload: updatedAssumptions });
       setEditingId(null);
       setEditingValue("");
     }
@@ -92,14 +91,14 @@ export default function TableCard({
 
   const handleDelete = (id) => {
     const updatedAssumptions = assumptions.filter((assumption) => assumption.id !== id);
-    onChange(updatedAssumptions);
+    dispatch({ type: ACTIONS.SET_ASSUMPTIONS, payload: updatedAssumptions });
   };
 
   const handleCertaintyChange = (id, newCertainty) => {
     const updatedAssumptions = assumptions.map((assumption) =>
       assumption.id === id ? { ...assumption, certainty: newCertainty } : assumption
     );
-    onChange(updatedAssumptions);
+    dispatch({ type: ACTIONS.SET_ASSUMPTIONS, payload: updatedAssumptions });
   };
 
   const handleKeyDown = (e, action) => {

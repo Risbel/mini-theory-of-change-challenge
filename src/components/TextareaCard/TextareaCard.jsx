@@ -1,8 +1,12 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
+import { ACTIONS } from "@/constants/actionTypes";
 
-const TextareaCard = ({ maxLength = 250, value = "", onChange = () => {}, className = "" }) => {
+const TextareaCard = ({ maxLength = 250, className = "" }) => {
+  const { state, dispatch } = useTheoryOfChangeContext();
+  const { reasonValue: value } = state;
   const currentLength = value.length;
   const isNearLimit = currentLength > maxLength * 0.8;
   const isAtLimit = currentLength >= maxLength;
@@ -18,7 +22,7 @@ const TextareaCard = ({ maxLength = 250, value = "", onChange = () => {}, classN
           <Textarea
             id="reason-textarea"
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => dispatch({ type: ACTIONS.SET_REASON, payload: e.target.value })}
             placeholder="e.g. Strengthening local neighbourhoods through the power of food"
             maxLength={maxLength}
             resize="true"

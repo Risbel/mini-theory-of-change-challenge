@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
+import { ACTIONS } from "@/constants/actionTypes";
 
-const TagInputCard = ({ tags = [], onChange = () => {}, className = "" }) => {
+const TagInputCard = ({ className = "" }) => {
+  const { state, dispatch } = useTheoryOfChangeContext();
+  const { peopleTags: tags } = state;
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (e) => {
@@ -19,20 +23,20 @@ const TagInputCard = ({ tags = [], onChange = () => {}, className = "" }) => {
     const trimmedValue = inputValue.trim();
     if (trimmedValue && !isDuplicate(trimmedValue)) {
       const newTags = [...tags, trimmedValue];
-      onChange(newTags);
+      dispatch({ type: ACTIONS.SET_PEOPLE_TAGS, payload: newTags });
       setInputValue("");
     }
   };
 
   const removeTag = (indexToRemove) => {
     const newTags = tags.filter((_, index) => index !== indexToRemove);
-    onChange(newTags);
+    dispatch({ type: ACTIONS.SET_PEOPLE_TAGS, payload: newTags });
   };
 
   const removeLastTag = () => {
     if (tags.length > 0) {
       const newTags = tags.slice(0, -1);
-      onChange(newTags);
+      dispatch({ type: ACTIONS.SET_PEOPLE_TAGS, payload: newTags });
     }
   };
 

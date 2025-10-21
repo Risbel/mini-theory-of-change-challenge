@@ -1,15 +1,12 @@
 import React from "react";
 import ColumnCardWrapper from "./ColumnCardWrapper";
 import Column from "./Column";
+import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
+import { ACTIONS } from "@/constants/actionTypes";
 
-const ToCBoardCard = ({
-  directOutcomes = [],
-  indirectOutcomes = [],
-  ultimateImpact = [],
-  onDirectOutcomesChange = () => {},
-  onIndirectOutcomesChange = () => {},
-  onUltimateImpactChange = () => {},
-}) => {
+const ToCBoardCard = () => {
+  const { state, dispatch } = useTheoryOfChangeContext();
+  const { directOutcomes, indirectOutcomes, ultimateImpact } = state;
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <ColumnCardWrapper
@@ -32,7 +29,10 @@ const ToCBoardCard = ({
         description="Changes we influence directly"
         pillText="Zone of direct influence"
       >
-        <Column items={directOutcomes} onItemsChange={onDirectOutcomesChange} />
+        <Column
+          items={directOutcomes}
+          onItemsChange={(items) => dispatch({ type: ACTIONS.SET_DIRECT_OUTCOMES, payload: items })}
+        />
       </ColumnCardWrapper>
 
       <ColumnCardWrapper
@@ -42,7 +42,10 @@ const ToCBoardCard = ({
         pillText="Zone of indirect influence"
         isDotted={true}
       >
-        <Column items={indirectOutcomes} onItemsChange={onIndirectOutcomesChange} />
+        <Column
+          items={indirectOutcomes}
+          onItemsChange={(items) => dispatch({ type: ACTIONS.SET_INDIRECT_OUTCOMES, payload: items })}
+        />
       </ColumnCardWrapper>
 
       <ColumnCardWrapper
@@ -52,7 +55,10 @@ const ToCBoardCard = ({
         pillText="Zone of contribution"
         isDotted={true}
       >
-        <Column items={ultimateImpact} onItemsChange={onUltimateImpactChange} />
+        <Column
+          items={ultimateImpact}
+          onItemsChange={(items) => dispatch({ type: ACTIONS.SET_ULTIMATE_IMPACT, payload: items })}
+        />
       </ColumnCardWrapper>
     </div>
   );
