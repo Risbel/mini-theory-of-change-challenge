@@ -15,7 +15,7 @@ const ToCBoardCard = () => {
         description="Sets of activities we deliver"
         pillText="Zone of control"
       >
-        <p className="text-sm">
+        <p className="text-xs">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
           consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit.
           Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit

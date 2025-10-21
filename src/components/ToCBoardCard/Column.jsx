@@ -3,10 +3,16 @@ import { cn } from "@/lib/utils";
 import DropIndicator from "./DropIndicator";
 import DraggableItem from "./DraggableItem";
 import AddItemInput from "./AddItemInput";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CheckIcon, XIcon } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 const Column = ({ items = [], onItemsChange = () => {}, className = "", children }) => {
   const [draggedItem, setDraggedItem] = useState(null);
   const [dropPosition, setDropPosition] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+  const [editingValue, setEditingValue] = useState("");
   const columnRef = useRef(null);
 
   const handleDragStart = (e, index) => {
@@ -82,6 +88,41 @@ const Column = ({ items = [], onItemsChange = () => {}, className = "", children
     onItemsChange([...items, newItem]);
   };
 
+  const handleEditItem = (item, index) => {
+    setEditingItem(index);
+    setEditingValue(item.title);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingValue.trim() && editingItem !== null) {
+      const updatedItems = items.map((item, index) =>
+        index === editingItem ? { ...item, title: editingValue.trim() } : item
+      );
+      onItemsChange(updatedItems);
+      setEditingItem(null);
+      setEditingValue("");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingItem(null);
+    setEditingValue("");
+  };
+
+  const handleDeleteItem = (item, index) => {
+    const updatedItems = items.filter((_, i) => i !== index);
+    onItemsChange(updatedItems);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSaveEdit();
+    } else if (e.key === "Escape") {
+      handleCancelEdit();
+    }
+  };
+
   return (
     <div
       ref={columnRef}
@@ -93,24 +134,46 @@ const Column = ({ items = [], onItemsChange = () => {}, className = "", children
     >
       {items.map((item, index) => (
         <div key={item.id || index}>
-          {/* Drop indicator */}
           {dropPosition === index && draggedItem !== index && <DropIndicator />}
 
-          {/* Draggable item */}
-          <DraggableItem
-            item={item}
-            index={index}
-            isDragging={draggedItem === index}
-            onDragStart={handleDragStart}
-            children={children}
-          />
+          {editingItem === index ? (
+            <div className="p-2 border rounded-lg shadow-sm bg-background">
+              <div className="flex items-start gap-1">
+                <Textarea
+                  value={editingValue}
+                  onChange={(e) => setEditingValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                  style={{ lineHeight: "1.2", fontSize: "12px" }}
+                />
+
+                <Button
+                  size="icon"
+                  className="size-5"
+                  variant="outline"
+                  title="Cancel editing"
+                  onClick={handleCancelEdit}
+                >
+                  <XIcon className="size-3" />
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <DraggableItem
+              item={item}
+              index={index}
+              isDragging={draggedItem === index}
+              onDragStart={handleDragStart}
+              onEdit={handleEditItem}
+              onDelete={handleDeleteItem}
+              children={children}
+            />
+          )}
         </div>
       ))}
 
-      {/* Drop indicator at the end */}
       {dropPosition === items.length && <DropIndicator />}
 
-      {/* Add item input - Jira style */}
       <AddItemInput onAddItem={handleAddItem} />
     </div>
   );

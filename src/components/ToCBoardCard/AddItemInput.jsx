@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 
 const AddItemInput = ({ onAddItem }) => {
   const [newItemValue, setNewItemValue] = useState("");
@@ -30,17 +31,17 @@ const AddItemInput = ({ onAddItem }) => {
     <>
       {showInput ? (
         <div className="space-y-2 p-2 border rounded-lg bg-card">
-          <textarea
+          <Textarea
+            rows={3}
             ref={inputRef}
             value={newItemValue}
             onChange={(e) => setNewItemValue(e.target.value)}
             onKeyDown={handleKeyDown}
             autoFocus
             placeholder="What needs to be done?"
-            rows={3}
-            className="w-full text-xs p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+            style={{ lineHeight: "1.2", fontSize: "12px" }}
           />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 justify-end">
             <Button
               size="sm"
               onClick={handleAddItem}
@@ -51,16 +52,16 @@ const AddItemInput = ({ onAddItem }) => {
               Add
             </Button>
             <Button
-              size="sm"
-              variant="ghost"
+              size="icon"
+              variant="outline"
               onClick={() => {
                 setShowInput(false);
                 setNewItemValue("");
               }}
-              className="text-xs h-7"
+              className="size-7"
               title="Press Esc to close"
             >
-              ✕
+              <XIcon className="size-3" />
             </Button>
           </div>
         </div>
