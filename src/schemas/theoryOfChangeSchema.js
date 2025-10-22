@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CERTAINTY_LEVELS } from "@/utils/certainty";
 
 // Schema for sub-outcome
 const subOutcomeSchema = z.object({
@@ -10,7 +11,7 @@ const subOutcomeSchema = z.object({
 const assumptionSchema = z.object({
   id: z.string(),
   description: z.string().min(1, "Assumption description cannot be empty"),
-  certainty: z.enum(["very", "moderate", "uncertain"], {
+  certainty: z.enum([CERTAINTY_LEVELS.VERY, CERTAINTY_LEVELS.MODERATE, CERTAINTY_LEVELS.UNCERTAIN], {
     required_error: "Certainty level is required",
   }),
 });

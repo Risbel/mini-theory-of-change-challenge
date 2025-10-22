@@ -12,6 +12,7 @@ import {
   FileCheck2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { getCertaintyLabel, getCertaintyColor } from "@/utils/certainty";
 
 const LocalStorageViewer = () => {
   const [savedData, setSavedData] = useState(null);
@@ -62,32 +63,6 @@ const LocalStorageViewer = () => {
     };
   }, []);
 
-  const getCertaintyColor = (certainty) => {
-    switch (certainty) {
-      case "very":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "moderate":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "uncertain":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
-
-  const getCertaintyLabel = (certainty) => {
-    switch (certainty) {
-      case "very":
-        return "Very Certain";
-      case "moderate":
-        return "Moderately Certain";
-      case "uncertain":
-        return "Uncertain";
-      default:
-        return "Unknown";
-    }
-  };
-
   if (isLoading) {
     return (
       <Card className="w-full">
@@ -136,9 +111,9 @@ const LocalStorageViewer = () => {
               variant="outline"
               size="sm"
               onClick={clearSavedData}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
             >
-              <TrashIcon className="h-4 w-4" />
+              <TrashIcon className="h-4 w-4 text-destructive" />
               <span className="hidden md:block">Clear</span>
             </Button>
           </div>
@@ -188,13 +163,13 @@ const LocalStorageViewer = () => {
           </h3>
           <div className="space-y-3">
             {savedData.directOutcomes.map((outcome) => (
-              <div key={outcome.id} className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                <h4 className="font-medium text-purple-900 mb-2">{outcome.title}</h4>
+              <div key={outcome.id} className="bg-primary/5 p-4 rounded-lg border border-primary">
+                <h4 className="font-medium text-primary mb-2">{outcome.title}</h4>
                 {outcome.subOutcomes && outcome.subOutcomes.length > 0 && (
                   <div className="ml-4 space-y-1">
                     {outcome.subOutcomes.map((subOutcome) => (
-                      <div key={subOutcome.id} className="text-sm text-purple-700 flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+                      <div key={subOutcome.id} className="text-sm text-primary flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
                         {subOutcome.title}
                       </div>
                     ))}

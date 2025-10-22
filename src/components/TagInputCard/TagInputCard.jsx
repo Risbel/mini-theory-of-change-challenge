@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
 import { ACTIONS } from "@/constants/actionTypes";
+import { XIcon } from "lucide-react";
 
 const TagInputCard = ({ className = "" }) => {
   const { state, dispatch } = useTheoryOfChangeContext();
@@ -51,22 +52,20 @@ const TagInputCard = ({ className = "" }) => {
           The people we serve
         </label>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1">
           {tags.map((tag, index) => (
             <div
               key={index}
-              className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-primary/10 text-primary border border-primary/20"
+              className="inline-flex items-center gap-1 pl-3 pr-1 py-1 rounded-full text-sm bg-primary/10 text-primary border border-primary/20"
             >
               <span>{tag}</span>
               <button
                 type="button"
                 onClick={() => removeTag(index)}
-                className="ml-1 hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                className="hover:bg-primary/20 rounded-full p-1 transition-colors cursor-pointer"
                 aria-label={`Remove ${tag} tag`}
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <XIcon className="size-3" />
               </button>
             </div>
           ))}
@@ -79,6 +78,7 @@ const TagInputCard = ({ className = "" }) => {
           onKeyDown={handleKeyDown}
           placeholder="Type and press Enter to add..."
           className="w-full"
+          style={{ lineHeight: "1.2", fontSize: "14px" }}
         />
       </CardContent>
     </Card>

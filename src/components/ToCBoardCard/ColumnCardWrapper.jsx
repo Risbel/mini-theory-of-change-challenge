@@ -59,7 +59,7 @@ const ColumnCardWrapper = ({
     <div>
       {icon && (
         <div className="flex justify-center items-center space-y-2 mb-4">
-          <div className="bg-primary/10 rounded-full p-3">
+          <div className="bg-primary/5 rounded-full p-3 border-2 border-primary">
             <Icon className="size-8 text-primary" />
           </div>
         </div>
@@ -67,7 +67,7 @@ const ColumnCardWrapper = ({
 
       <Card
         className={cn(
-          "h-64 flex flex-col pb-0 pt-4 gap-0 space-y-0 overflow-hidden gap-2",
+          "h-64 flex flex-col pb-0 pt-4 space-y-0 overflow-hidden gap-2",
           isDotted && "border-2 border-dashed border-primary",
           className
         )}

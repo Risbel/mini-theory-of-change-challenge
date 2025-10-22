@@ -5,6 +5,7 @@ import { SaveIcon, LoaderCircleIcon, AlertCircleIcon } from "lucide-react";
 import { validateTheoryOfChangeData, savedDataSchema } from "@/schemas/theoryOfChangeSchema";
 import { toast } from "sonner";
 import { ACTIONS } from "@/constants/actionTypes";
+import { cn } from "@/lib/utils";
 
 const SaveButton = () => {
   const { state, dispatch } = useTheoryOfChangeContext();
@@ -63,7 +64,7 @@ const SaveButton = () => {
       size={"lg"}
       onClick={handleSave}
       disabled={isSaving || !validation.isValid}
-      className={`cursor-pointer ${!validation.isValid ? "opacity-50" : ""}`}
+      className={cn("cursor-pointer", !validation.isValid ? "opacity-50" : "")}
       type="button"
       title={
         !validation.isValid

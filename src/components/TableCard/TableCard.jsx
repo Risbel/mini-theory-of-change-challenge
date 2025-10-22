@@ -8,27 +8,7 @@ import { cn } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon, CircleIcon, Edit2Icon, PlusIcon, Trash2Icon, XIcon } from "lucide-react";
 import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
 import { ACTIONS } from "@/constants/actionTypes";
-
-const CERTAINTY_OPTIONS = [
-  {
-    value: "very",
-    label: "Very certain",
-    color: "text-green-500 fill-green-500/20",
-    borderColor: "border-green-300 border-2",
-  },
-  {
-    value: "moderate",
-    label: "Moderately certain",
-    color: "text-yellow-500 fill-yellow-500/20",
-    borderColor: "border-yellow-300 border-2",
-  },
-  {
-    value: "uncertain",
-    label: "Uncertain",
-    color: "text-red-500 fill-red-500/20",
-    borderColor: "border-red-300 border-2",
-  },
-];
+import { CERTAINTY_LEVELS, getCertaintyBorderColor, getCertaintyIconColor, getCertaintyLabel } from "@/utils/certainty";
 
 export default function TableCard({ title = "What we believe to be true", className = "" }) {
   const { state, dispatch } = useTheoryOfChangeContext();
@@ -47,11 +27,6 @@ export default function TableCard({ title = "What we believe to be true", classN
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const currentAssumptions = assumptions.slice(startIndex, endIndex);
-
-  const getCertaintyBorderColor = (value) => {
-    const option = CERTAINTY_OPTIONS.find((opt) => opt.value === value);
-    return option ? option.borderColor : "border-gray-300";
-  };
 
   const handleAddAssumption = () => {
     if (newDescription.trim() && newCertainty) {
@@ -167,9 +142,10 @@ export default function TableCard({ title = "What we believe to be true", classN
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="cursor-pointer">
-                          {CERTAINTY_OPTIONS.map((option) => (
-                            <SelectItem key={option.value} value={option.value} className="cursor-pointer">
-                              <CircleIcon className={cn("size-2", option.color)} /> {option.label}
+                          {Object.values(CERTAINTY_LEVELS).map((option) => (
+                            <SelectItem key={option} value={option} className="cursor-pointer">
+                              <CircleIcon className={cn("size-2", getCertaintyIconColor(option))} />
+                              {getCertaintyLabel(option)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -179,21 +155,21 @@ export default function TableCard({ title = "What we believe to be true", classN
                       <div className="flex items-center">
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="icon"
                           onClick={() => handleEditStart(assumption)}
-                          className="h-8 w-8 p-0 cursor-pointer"
+                          className="cursor-pointer"
                           aria-label="Edit assumption"
                         >
-                          <Edit2Icon className="size-4" />
+                          <Edit2Icon className="size-4 text-muted-foreground" />
                         </Button>
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="icon"
                           onClick={() => handleDelete(assumption.id)}
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive cursor-pointer"
+                          className="cursor-pointer"
                           aria-label="Delete assumption"
                         >
-                          <Trash2Icon className="size-4 text-destructive" />
+                          <Trash2Icon className="size-4 text-muted-foreground" />
                         </Button>
                       </div>
                     </TableCell>
@@ -210,6 +186,7 @@ export default function TableCard({ title = "What we believe to be true", classN
                       onKeyDown={(e) => handleKeyDown(e, "add")}
                       placeholder="Type and press Enter to add..."
                       className="w-[200px] md:w-full"
+                      style={{ lineHeight: "1.2", fontSize: "14px" }}
                     />
                   </TableCell>
                   <TableCell>
@@ -220,9 +197,10 @@ export default function TableCard({ title = "What we believe to be true", classN
                         <SelectValue placeholder="Select certainty" />
                       </SelectTrigger>
                       <SelectContent className="cursor-pointer">
-                        {CERTAINTY_OPTIONS.map((option) => (
-                          <SelectItem key={option.value} value={option.value} className="cursor-pointer">
-                            <CircleIcon className={cn("size-2", option.color)} /> {option.label}
+                        {Object.values(CERTAINTY_LEVELS).map((option) => (
+                          <SelectItem key={option} value={option} className="cursor-pointer">
+                            <CircleIcon className={cn("size-2", getCertaintyIconColor(option))} />
+                            {getCertaintyLabel(option)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -234,7 +212,7 @@ export default function TableCard({ title = "What we believe to be true", classN
                         title="Add assumption"
                         onClick={handleAddAssumption}
                         disabled={!newDescription.trim() || !newCertainty}
-                        size="sm"
+                        size="icon"
                         className="bg-primary text-primary-foreground hover:bg-primary/90"
                       >
                         <PlusIcon className="w-4 h-4" />
@@ -242,7 +220,7 @@ export default function TableCard({ title = "What we believe to be true", classN
                       <Button
                         className={cn(!newDescription.trim() && "opacity-0")}
                         variant="outline"
-                        size="sm"
+                        size="icon"
                         title="Cancel"
                         onClick={() => setNewDescription("")}
                       >
@@ -277,7 +255,7 @@ export default function TableCard({ title = "What we believe to be true", classN
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="icon"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
                 >
@@ -288,7 +266,7 @@ export default function TableCard({ title = "What we believe to be true", classN
                 </span>
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="icon"
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
                 >
