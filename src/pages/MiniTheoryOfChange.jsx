@@ -3,6 +3,7 @@ import { TagInputCard } from "@/components/TagInputCard";
 import { TableCard } from "@/components/TableCard";
 import ToCBoardCard from "@/components/ToCBoardCard";
 import SaveButton from "@/components/SaveButton";
+import LocalStorageViewer from "@/components/LocalStorageViewer";
 import TheoryOfChangeProvider from "@/contexts/TheoryOfChangeProvider";
 
 const MiniTheoryOfChange = () => {
@@ -27,6 +28,8 @@ const MiniTheoryOfChange = () => {
         <div className="flex justify-end pt-4">
           <SaveButton />
         </div>
+
+        <LocalStorageViewer />
       </div>
     </TheoryOfChangeProvider>
   );

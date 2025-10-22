@@ -75,7 +75,7 @@ const DraggableItem = ({
               <Button
                 size="icon"
                 variant="outline"
-                className={cn("opacity-0 group-hover:opacity-100", "size-6")}
+                className={cn("lg:opacity-0 lg:group-hover:opacity-100", "size-6")}
                 onClick={(e) => e.stopPropagation()}
               >
                 <MoreVerticalIcon className="size-3" />

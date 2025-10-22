@@ -58,15 +58,15 @@ const SubOutcomeItem = ({
         <div className="p-2 bg-background border rounded-lg text-xs hover:border-primary/50 transition-colors">
           <div className="flex items-start gap-2">
             <div className="flex-1 min-w-0">
-              <span className="text-xs break-words leading-relaxed">{subOutcome.title}</span>
+              <span className="text-xs leading-relaxed">{subOutcome.title}</span>
             </div>
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     size="icon"
                     variant="outline"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity size-6"
+                    className="md:opacity-0 md:group-hover:opacity-100 transition-opacity size-6"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <MoreVerticalIcon className="size-3" />

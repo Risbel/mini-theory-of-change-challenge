@@ -27,6 +27,10 @@ const TextareaCard = ({ maxLength = 250, className = "" }) => {
             maxLength={maxLength}
             resize="true"
             className={cn(isAtLimit && "border-destructive")}
+            style={{
+              lineHeight: "1.5",
+              fontSize: "15px",
+            }}
           />
 
           <div className="absolute bottom-2 right-2">

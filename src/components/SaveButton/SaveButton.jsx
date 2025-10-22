@@ -44,6 +44,9 @@ const SaveButton = () => {
 
       localStorage.setItem("theoryOfChangeData", JSON.stringify(validatedData));
 
+      // Dispatch custom event to notify LocalStorageViewer
+      window.dispatchEvent(new CustomEvent("dataSaved"));
+
       // Reset all state after successful save
       dispatch({ type: ACTIONS.RESET_ALL });
 

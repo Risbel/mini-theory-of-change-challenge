@@ -17,7 +17,7 @@ const ToCBoardCard = ({ className = "" }) => {
         pillText="Zone of control"
         icon="users"
       >
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-md md:text-sm text-muted-foreground leading-relaxed">
           Programmes displayed here are synced with your main Programmes list. To add or make changes, please visit the{" "}
           <span className="text-primary font-semibold cursor-pointer hover:underline">Programmes</span> section.
         </p>

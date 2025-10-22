@@ -148,7 +148,7 @@ export default function TableCard({ title = "What we believe to be true", classN
                           className="w-full min-w-0"
                         />
                       ) : (
-                        <div className="truncate max-w-full" title={assumption.description}>
+                        <div className="truncate max-w-32 md:max-w-full" title={assumption.description}>
                           {assumption.description}
                         </div>
                       )}
@@ -159,7 +159,10 @@ export default function TableCard({ title = "What we believe to be true", classN
                         onValueChange={(value) => handleCertaintyChange(assumption.id, value)}
                       >
                         <SelectTrigger
-                          className={cn("w-[180px] cursor-pointer", getCertaintyBorderColor(assumption.certainty))}
+                          className={cn(
+                            "w-[150px] md:w-[180px] cursor-pointer",
+                            getCertaintyBorderColor(assumption.certainty)
+                          )}
                         >
                           <SelectValue />
                         </SelectTrigger>
@@ -206,12 +209,14 @@ export default function TableCard({ title = "What we believe to be true", classN
                       onChange={(e) => setNewDescription(e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, "add")}
                       placeholder="Type and press Enter to add..."
-                      className="w-full"
+                      className="w-[200px] md:w-full"
                     />
                   </TableCell>
                   <TableCell>
                     <Select value={newCertainty} onValueChange={setNewCertainty}>
-                      <SelectTrigger className={cn("w-[180px] cursor-pointer", getCertaintyBorderColor(newCertainty))}>
+                      <SelectTrigger
+                        className={cn("w-[150px] md:w-[180px] cursor-pointer", getCertaintyBorderColor(newCertainty))}
+                      >
                         <SelectValue placeholder="Select certainty" />
                       </SelectTrigger>
                       <SelectContent className="cursor-pointer">
