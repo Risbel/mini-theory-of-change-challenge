@@ -13,10 +13,15 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { getCertaintyLabel, getCertaintyColor } from "@/utils/certainty";
+import { savedDataSchema } from "@/schemas/theoryOfChangeSchema";
+import ErrorBoundary from "./ErrorBoundary";
+import FallbackError from "./FallbackError";
+import { LoaderCircleIcon } from "lucide-react";
 
-const LocalStorageViewer = () => {
+const LocalStorageViewerContent = () => {
   const [savedData, setSavedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const loadSavedData = () => {
     setIsLoading(true);
@@ -24,14 +29,18 @@ const LocalStorageViewer = () => {
       const data = localStorage.getItem("theoryOfChangeData");
       if (data) {
         const parsedData = JSON.parse(data);
-        setSavedData(parsedData);
+
+        const validatedData = savedDataSchema.parse(parsedData);
+        setSavedData(validatedData);
       } else {
         setSavedData(null);
       }
     } catch (error) {
-      console.error("Error loading saved data:", error);
       toast.error("Error loading saved data");
       setSavedData(null);
+
+      // Re-throw the error so the error boundary can catch it
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -49,11 +58,19 @@ const LocalStorageViewer = () => {
   };
 
   useEffect(() => {
-    loadSavedData();
+    try {
+      loadSavedData();
+    } catch (err) {
+      setError(err);
+    }
 
     // Listen for data saved events
     const handleDataSaved = () => {
-      loadSavedData();
+      try {
+        loadSavedData();
+      } catch (err) {
+        setError(err);
+      }
     };
 
     window.addEventListener("dataSaved", handleDataSaved);
@@ -63,12 +80,16 @@ const LocalStorageViewer = () => {
     };
   }, []);
 
+  // Throw error during render so error boundary can catch it
+  if (error) {
+    throw error;
+  }
+
   if (isLoading) {
     return (
       <Card className="w-full">
         <CardContent className="flex items-center justify-center p-8">
-          <RefreshCwIcon className="h-6 w-6 animate-spin mr-2" />
-          <span>Loading saved data...</span>
+          <LoaderCircleIcon className="size-6 animate-spin" />
         </CardContent>
       </Card>
     );
@@ -102,21 +123,16 @@ const LocalStorageViewer = () => {
             <SaveIcon className="h-5 w-5 text-primary" />
             Saved Data
           </CardTitle>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={loadSavedData} disabled={isLoading}>
-              <RefreshCwIcon className="h-4 w-4" />
-              <span className="hidden md:block">Refresh</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearSavedData}
-              className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
-            >
-              <TrashIcon className="h-4 w-4 text-destructive" />
-              <span className="hidden md:block">Clear</span>
-            </Button>
-          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearSavedData}
+            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+          >
+            <TrashIcon className="h-4 w-4 text-destructive" />
+            <span className="hidden md:block">Clear</span>
+          </Button>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -231,6 +247,14 @@ const LocalStorageViewer = () => {
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+const LocalStorageViewer = () => {
+  return (
+    <ErrorBoundary fallback={<FallbackError />}>
+      <LocalStorageViewerContent />
+    </ErrorBoundary>
   );
 };
 

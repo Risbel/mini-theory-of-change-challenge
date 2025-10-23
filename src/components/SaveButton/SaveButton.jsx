@@ -11,13 +11,11 @@ const SaveButton = () => {
   const { state, dispatch } = useTheoryOfChangeContext();
   const [isSaving, setIsSaving] = useState(false);
 
-  // Validate the current state
   const validation = useMemo(() => {
     return validateTheoryOfChangeData(state);
   }, [state]);
 
   const handleSave = async () => {
-    // Don't save if validation fails
     if (!validation.isValid) {
       toast.error("Cannot save: Validation failed", validation.errors || []);
       return;
@@ -40,7 +38,6 @@ const SaveButton = () => {
         timestamp: new Date().toISOString(),
       };
 
-      // Validate the data structure before saving
       const validatedData = savedDataSchema.parse(dataToSave);
 
       localStorage.setItem("theoryOfChangeData", JSON.stringify(validatedData));
@@ -77,16 +74,8 @@ const SaveButton = () => {
           <LoaderCircleIcon className="size-4 animate-spin" />
           Saving...
         </>
-      ) : !validation.isValid ? (
-        <>
-          <AlertCircleIcon className="size-4" />
-          Complete Required Fields
-        </>
       ) : (
-        <>
-          <SaveIcon className="size-4" />
-          Save All Data
-        </>
+        <>Save</>
       )}
     </Button>
   );
