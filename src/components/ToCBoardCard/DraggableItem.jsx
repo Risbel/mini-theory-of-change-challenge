@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { MoreVerticalIcon, Trash2Icon, Edit2Icon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from "lucide-react";
+import { MoreVerticalIcon, Trash2Icon, Edit2Icon, ChevronRightIcon, PlusIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,7 +40,6 @@ const DraggableItem = ({
       draggable
       onDragStart={(e) => onDragStart(e, index)}
       onClick={() => allowSubOutcomes && setIsExpanded(!isExpanded)}
-      onSelectStart={(e) => e.preventDefault()}
       className={cn(
         "group border rounded-lg overflow-hidden shadow-sm transition-all duration-200 cursor-move",
         "hover:shadow-md hover:border-primary/50 cursor-pointer group select-none",

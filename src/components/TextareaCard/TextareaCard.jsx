@@ -1,13 +1,32 @@
+import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useTheoryOfChangeContext } from "@/hooks/useTheoryOfChangeContext";
 import { ACTIONS } from "@/constants/actionTypes";
+import { useDebouncedCallback } from "use-debounce";
 
 const TextareaCard = ({ maxLength = 250, className = "" }) => {
   const { state, dispatch } = useTheoryOfChangeContext();
-  const { reasonValue: value } = state;
-  const currentLength = value.length;
+  const { reasonValue: globalValue } = state;
+  const [localValue, setLocalValue] = useState(globalValue);
+
+  const debouncedDispatch = useDebouncedCallback((value) => {
+    dispatch({ type: ACTIONS.SET_REASON, payload: value });
+  }, 1000);
+
+  // Sync local state when global state changes externally (e.g., form reset)
+  useEffect(() => {
+    setLocalValue(globalValue);
+  }, [globalValue]);
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+    debouncedDispatch(newValue);
+  };
+
+  const currentLength = localValue.length;
   const isNearLimit = currentLength > maxLength * 0.8;
   const isAtLimit = currentLength >= maxLength;
 
@@ -21,8 +40,8 @@ const TextareaCard = ({ maxLength = 250, className = "" }) => {
         <div className="relative">
           <Textarea
             id="reason-textarea"
-            value={value}
-            onChange={(e) => dispatch({ type: ACTIONS.SET_REASON, payload: e.target.value })}
+            value={localValue}
+            onChange={handleChange}
             placeholder="e.g. Strengthening local neighbourhoods through the power of food"
             maxLength={maxLength}
             resize="true"
